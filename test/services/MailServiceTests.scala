@@ -23,10 +23,12 @@ trait MailSpec extends FlatSpec with Matchers with BeforeAndAfterAll {
 	val greenMail = new GreenMail(new ServerSetup(mailPort, null, "smtp"));
 
 	override def beforeAll() {
+		super.beforeAll()
 		greenMail.start()
 	}
 
 	override def afterAll() {
+		super.afterAll()
 		greenMail.stop();
 	}
 
