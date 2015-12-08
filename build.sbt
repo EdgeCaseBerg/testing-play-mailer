@@ -13,7 +13,8 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 libraryDependencies ++= { 
 	Seq(
 		"com.typesafe" % "config" % "1.2.1",
-		"org.scalatest" % "scalatest_2.11" % "2.2.4" % "test"
+		"org.scalatest" % "scalatest_2.11" % "2.2.4" % "test",
+		"com.icegreen" % "greenmail" % "1.4.1" % "test"
 	)
 }
 
