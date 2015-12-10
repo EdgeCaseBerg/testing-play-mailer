@@ -78,7 +78,7 @@ trait MailSpec extends FlatSpec with Matchers with BeforeAndAfterEach with Befor
 		val mailParts = mimeMsg.getContent().asInstanceOf[Multipart]
 		var plainText = Option[String](null)
 		var htmlText = Option[String](null)
-		for (p <- 0 to mailParts.getCount()) {
+		for (p <- 0 until mailParts.getCount()) {
 			/* Code adapted from studying javadocs and http://www.coderanch.com/t/597373/java/java/Body-text-javamail-retrieve-email */
 			val bodyPart = mailParts.getBodyPart(p)
 			if (bodyPart.isMimeType("text/*")) {
@@ -89,7 +89,7 @@ trait MailSpec extends FlatSpec with Matchers with BeforeAndAfterEach with Befor
 				}
 			} else if (bodyPart.isMimeType("multipart/*")) {
 				val multiPart = bodyPart.getContent().asInstanceOf[Multipart]
-				for (mp <- 0 to multiPart.getCount()) {
+				for (mp <- 0 until multiPart.getCount()) {
 					val part = multiPart.getBodyPart(mp)
 					if (part.isMimeType("text/plain")) {
 						plainText = getTextFromBodyPart(part)
