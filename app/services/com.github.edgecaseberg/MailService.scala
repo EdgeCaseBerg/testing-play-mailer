@@ -10,7 +10,7 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 
 class MailService(implicit ec: ExecutionContext) {
-	val fromAddress = "tester@domain.com"
+	val fromAddress = "tester@domain.com" //IRL pull from configuration
 
 	def sendWelcomeEmailTo(to: Emailable) {
 		val subject = "Welcome!"
