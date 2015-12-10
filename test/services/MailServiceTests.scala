@@ -35,5 +35,9 @@ class MailServiceTests extends test.MailSpec {
 		assertResult(List("admin@localhost"))(emails.head.from)
 		assertResult(List("user@localhost"))(emails.head.to)
 		assertResult("A Test")(emails.head.subject)
+		assert(emails.head.plain.isDefined)
+		assertResult("plain")(emails.head.plain.get)
+		assert(emails.head.html.isDefined)
+		assertResult("<html><body><h1>Hi!</h1></body></html>")(emails.head.html.get)
 	}
 }
