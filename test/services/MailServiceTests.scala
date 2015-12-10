@@ -40,4 +40,21 @@ class MailServiceTests extends test.MailSpec {
 		assert(emails.head.html.isDefined)
 		assertResult("<html><body><h1>Hi!</h1></body></html>")(emails.head.html.get)
 	}
+
+	it should "send welcome mail to a User" in running(fakeApp) {
+		val user = User("name", "user@localhost")
+		mailService.sendWelcomeEmailTo(user)
+		waitForInbox(2000)
+		val emails = getMessageForEmail(user.email.getAddress())
+		assertResult(1)(emails.size)
+		assertResult(List(mailService.fromAddress))(emails.head.from)
+		assertResult(List("user@localhost"))(emails.head.to)
+		assertResult(mailService.welcomeSubject)(emails.head.subject)
+		assert(emails.head.plain.isDefined)
+		assert(emails.head.html.isDefined)
+		val plainText: String = views.txt.email.welcome(user.username, mailService.fromAddress).body
+		val htmlText: String = views.html.email.welcome(user.username, mailService.fromAddress).body
+		assertResult(plainText)(emails.head.plain.get)
+		assertResult(htmlText)(emails.head.html.get)
+	}
 }
