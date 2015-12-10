@@ -11,9 +11,10 @@ import scala.concurrent.duration._
 
 class MailService(implicit ec: ExecutionContext) {
 	val fromAddress = "tester@domain.com" //IRL pull from configuration
+	val welcomeSubject = "Welcome!"
 
 	def sendWelcomeEmailTo(to: Emailable) {
-		val subject = "Welcome!"
+
 		val (name, emailable) = to match {
 			case User(username, email) => (username, email)
 			case BillableClient(name, _, email) => (name, email)
@@ -23,7 +24,7 @@ class MailService(implicit ec: ExecutionContext) {
 		val sendTo = emailable.getAddress()
 		val plainText: String = views.txt.email.welcome(name, fromAddress).body
 		val htmlText: String = views.html.email.welcome(name, fromAddress).body
-		sendMail(fromAddress, sendTo, subject, plainText, htmlText)
+		sendMail(fromAddress, sendTo, welcomeSubject, plainText, htmlText)
 	}
 
 	def sendMail(from: String, to: String, subject: String, plainTextBody: String, htmlBody: String): Unit = Akka.system.scheduler.scheduleOnce(1.second) {
