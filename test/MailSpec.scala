@@ -60,7 +60,7 @@ trait MailSpec extends FlatSpec with Matchers with BeforeAndAfterEach with Befor
 
 	def getTextFromBodyPart(p: javax.mail.Part): Option[String] = {
 		if (p.isMimeType("text/*")) {
-			Some(p.getContent().asInstanceOf[String]) //Currently does not deal with the mails CRLF additions to the content.
+			Some(p.getContent().asInstanceOf[String].replaceAll("\r\n", "\n")) //Currently does not deal with the mails CRLF additions to the content.
 		} else {
 			None
 		}
