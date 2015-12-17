@@ -58,14 +58,6 @@ trait MailSpec extends FlatSpec with Matchers with BeforeAndAfterEach with Befor
 		).map(msg => mimeMessageToSimpleEmail(msg.getMimeMessage())).toList
 	}
 
-	def getTextFromBodyPart(p: javax.mail.Part): Option[String] = {
-		if (p.isMimeType("text/*")) {
-			Some(p.getContent().asInstanceOf[String].replaceAll("\r\n", "\n")) //Currently does not deal with the mails CRLF additions to the content.
-		} else {
-			None
-		}
-	}
-
 	def arr2List[T](arr: Array[T]): List[T] = {
 		arr.toList
 	}
@@ -74,31 +66,11 @@ trait MailSpec extends FlatSpec with Matchers with BeforeAndAfterEach with Befor
 		val subject = mimeMsg.getSubject()
 		val senders = arr2List(mimeMsg.getReplyTo()).map(_.toString())
 		val recipients = arr2List(mimeMsg.getAllRecipients()).map(_.toString())
-		/* Now the annoying part. The Message itself and all the disposition and such */
-		val mailParts = mimeMsg.getContent().asInstanceOf[Multipart]
-		var plainText = Option[String](null)
-		var htmlText = Option[String](null)
-		for (p <- 0 until mailParts.getCount()) {
-			/* Code adapted from studying javadocs and http://www.coderanch.com/t/597373/java/java/Body-text-javamail-retrieve-email */
-			val bodyPart = mailParts.getBodyPart(p)
-			if (bodyPart.isMimeType("text/*")) {
-				if (bodyPart.isMimeType("text/html")) {
-					htmlText = getTextFromBodyPart(bodyPart)
-				} else {
-					plainText = getTextFromBodyPart(bodyPart)
-				}
-			} else if (bodyPart.isMimeType("multipart/*")) {
-				val multiPart = bodyPart.getContent().asInstanceOf[Multipart]
-				for (mp <- 0 until multiPart.getCount()) {
-					val part = multiPart.getBodyPart(mp)
-					if (part.isMimeType("text/plain")) {
-						plainText = getTextFromBodyPart(part)
-					} else if (part.isMimeType("text/html")) {
-						htmlText = getTextFromBodyPart(part)
-					}
-				}
-			}
-		}
+
+		val parser = new org.apache.commons.mail.util.MimeMessageParser(mimeMsg)
+		parser.parse()
+		val plainText = Option(parser.getPlainContent().replaceAll("\r\n", "\n"))
+		val htmlText = Option(parser.getHtmlContent().replaceAll("\r\n", "\n"))
 
 		SimpleEmail(recipients, senders, subject, plainText, htmlText)
 	}

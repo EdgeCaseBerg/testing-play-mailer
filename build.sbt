@@ -17,6 +17,7 @@ libraryDependencies ++= {
 	Seq(
 		"com.typesafe" % "config" % "1.2.1",
 		"com.sun.mail" % "javax.mail" % "1.5.4",
+		"org.apache.commons" % "commons-email" % "1.4",
 		"com.typesafe.play.plugins" %% "play-plugins-mailer" % "2.3.1",
 		"org.scalatest" % "scalatest_2.11" % "2.2.4" % "test",
 		"com.icegreen" % "greenmail" % "1.4.1" % "test"
