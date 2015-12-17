@@ -54,7 +54,7 @@ class MailServiceTests extends test.MailSpec {
 		assert(emails.head.html.isDefined)
 		val plainText: String = views.txt.email.welcome(user.username, mailService.fromAddress).body
 		val htmlText: String = views.html.email.welcome(user.username, mailService.fromAddress).body
-		assertResult(plainText)(emails.head.plain.get)
-		assertResult(htmlText)(emails.head.html.get)
+		assertResult(plainText, "Plain text was incorrect")(emails.head.plain.get)
+		assertResult(htmlText, "HTML text was incorrect")(emails.head.html.get)
 	}
 }
