@@ -10,6 +10,7 @@ import com.github.edgecaseberg.models._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
+
 class MailServiceTests extends test.MailSpec {
 	import Emailable._
 
