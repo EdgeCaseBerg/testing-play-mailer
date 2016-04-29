@@ -1,5 +1,4 @@
-# testing-play-mailer
-How to test the Play 2.3 MailerPlugin
+# How to test the Play 2.3 MailerPlugin
 
 This repository contains a full working example of how to test the play! framework's mailer plugin with greenmail. For a more detailed explanation, please [see my post here].
 
